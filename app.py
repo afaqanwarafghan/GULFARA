@@ -146,7 +146,21 @@ def init_db():
             db.session.add(Product(name=n, category=c, price=pr, image=img))
         db.session.commit()
 
+# Auto create database on start - Fix for Render
+with app.app_context():
+    db.create_all()
+    if Product.query.count() == 0:
+        dummy = [
+            ("Classic Leather Watch","Watches",5500,"https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=400"),
+            ("Royal Oud Perfume","Perfume",3500,"https://images.unsplash.com/photo-1541643600914-78b084683601?w=400"),
+            ("Premium Sneakers","Shoes",4200,"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400"),
+            ("Designer Kurta","Clothes",3000,"https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400"),
+            ("Elegant Sunglasses","Accessory",1800,"https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400"),
+            ("Aroma Burner","Home",1500,"https://images.unsplash.com/photo-1513694203232-719a280e022f?w=400"),
+        ]
+        for n,c,pr,img in dummy:
+            db.session.add(Product(name=n, category=c, price=pr, image=img))
+        db.session.commit()
+
 if __name__ == '__main__':
-    with app.app_context():
-        init_db()
     app.run(host='0.0.0.0', port=5000)
